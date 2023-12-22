@@ -22,6 +22,7 @@ function Game({ orientation }) {
     if (orientation === "b") {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   function onDrop(sourceSquare, targetSquare) {
     const moveData = {
@@ -38,11 +39,11 @@ function Game({ orientation }) {
     return true;
   }
 
-  const requestMoveFromBot = async () => {
+  const requestMoveFromBot = useCallback(async () => {
     return (
-      await axios.post("http://chess.dygant.com/move", { fen: chess.fen() })
+      await axios.post("https://chess.dygant.com/move", { fen: chess.fen() })
     ).data;
-  };
+  }, [chess]);
 
   const makeAMove = useCallback(
     async (move) => {
@@ -72,7 +73,7 @@ function Game({ orientation }) {
         return null;
       }
     },
-    [chess, fen, requestMoveFromBot]
+    [chess, requestMoveFromBot]
   );
 
   return (
